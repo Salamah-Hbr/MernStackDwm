@@ -1,0 +1,67 @@
+import React, { Fragment, useEffect } from 'react';
+import propTypes from 'prop-types';
+import { connect } from 'react-redux';
+import Spinner from '../layout/Spinner';
+import {getall} fro
+import { register } from '../../actions/auth'
+
+const MOCK = ({ register, profile: { profiles, loading } }) => {
+
+    fetch("https://randomuser.me/api/users")
+        .then(res => res.json())
+        .then(data => console.log(data))
+
+    document.title = 'MOCK';
+
+
+    if (profiles.length > 100) {
+        const button = document.getElementById('btn')
+        button.disabled = true
+
+    }
+
+    fetch("https://randomuser.me/api/").then(res => res.json()).then(data => console.log('data'))
+
+
+    const getUsersNumber = () => {
+
+        let i = 100 - profiles.length
+        document.getElementById("exp-1").innerHTML = "you need " + i + " users";
+    }
+
+    return (
+        loading?(
+          <Spinner />
+        ) : (
+            <Fragment>
+                <button className="btn-primary btn" id="btn" onClick={ e => getUsersNumber(e)}>
+                    How much users you need to get 100 users ?
+                </button>
+                <br /> <br /> <br />
+                <p id="exp-1"/>
+
+                <br /> <br /> <br />
+
+
+                <button className="btn-primary btn" id="btn">
+                    Click me to add a user from  https://randomuser.me
+                </button>
+                <br /> <br /> <br />
+
+            </Fragment>
+        )
+    )
+}
+MOCK.propTypes = {
+    register: propTypes.func.isRequired,
+    profile: propTypes.object.isRequired
+};
+
+const mapStateToProps = state => ({
+    profile: state.profile
+});
+
+export default connect(
+    mapStateToProps,
+    { register }
+)(MOCK);
